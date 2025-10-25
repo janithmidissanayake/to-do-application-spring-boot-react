@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import TaskForm from './components/TaskForm.jsx'
-import TaskList from './components/TaskList.jsx'
-import { taskService } from './services/taskService.js';
+import TaskForm from '../components/TaskForm/TaskForm.jsx'
+import TaskList from '../components/TaskList/TaskList.jsx'
+import { taskService } from '../services/taskService.js';
 
-import './App.css'
+import '../App.css'
 
 function App() {
 
