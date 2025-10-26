@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import TaskForm from '../TaskForm';
@@ -137,7 +137,7 @@ describe('TaskForm Component', () => {
 
     expect(button).toBeDisabled();
     resolvePromise({ success: true });
-    await promise;
+    await waitFor(() => promise);
   });
 
   it('changes button text during submission', async () => {
@@ -155,7 +155,7 @@ describe('TaskForm Component', () => {
 
     expect(button).toHaveTextContent(/Adding Task/i);
     resolvePromise({ success: true });
-    await promise;
+    await waitFor(() => promise);
   });
 
 
@@ -175,7 +175,7 @@ describe('TaskForm Component', () => {
 
     expect(mockOnAddTask).toHaveBeenCalledTimes(1);
     resolvePromise({ success: true });
-    await promise;
+    await waitFor(() => promise);
   });
 
   

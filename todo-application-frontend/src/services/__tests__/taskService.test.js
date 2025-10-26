@@ -97,9 +97,9 @@ describe('taskService', () => {
       // Arrange
       const mockResponse = {
         data: [
-          { id: 1, title: 'Task 1', description: 'Description 1', completed: false },
-          { id: 2, title: 'Task 2', description: 'Description 2', completed: true },
-          { id: 3, title: 'Task 3', description: 'Description 3', completed: false },
+          { id: 1, title: 'Task 1', description: 'Description 1', isCompleted: false },
+          { id: 2, title: 'Task 2', description: 'Description 2', isCompleted: true },
+          { id: 3, title: 'Task 3', description: 'Description 3', isCompleted: false },
         ],
       };
 
@@ -338,15 +338,16 @@ describe('taskService', () => {
 
       // Act
       const created = await taskService.createTask(taskData);
-      const completed = await taskService.completeTask(created.id);
+      const completedTask = await taskService.completeTask(created.id);
       const tasks = await taskService.getRecentTasks(1);
 
       // Assert
       expect(created.id).toBe(1);
-      expect(completed.completed).toBe(true);
+      expect(completedTask.completed).toBe(true);
       expect(tasks).toHaveLength(1);
       expect(tasks[0].completed).toBe(true);
     });
   });
 });
+
 

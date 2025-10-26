@@ -48,21 +48,20 @@ public class TaskServiceImplTest {
                 .title("Task Title")
                 .description("Task Description")
                 .createdAt(ZonedDateTime.now())
-                .isCompleted(false)
                 .build();
     }
     private TaskResponse createMockResponse(Long id) {
         return TaskResponse.builder()
                 .id(id)
-                .title("Task Title")
-                .description("Task Description")
+                .title("Groceries")
+                .description("Buy fruits and vegetables")
                 .build();
     }
 
     //successful task creation
     @Test
     void createTaskSuccessfully() {
-        TaskRequest mockRequest = new TaskRequest("Test Title", "Test Desc");
+        TaskRequest mockRequest = new TaskRequest("Groceries", "Buy fruits and vegetables");
         Task unsavedTask = createMockTask(null);
         Task savedTask = createMockTask(1L);
         TaskResponse expectedResponse = createMockResponse(1L);
@@ -74,7 +73,7 @@ public class TaskServiceImplTest {
 
         assertThat(actualResponse).isNotNull();
         assertThat(actualResponse.getId()).isEqualTo(1L);
-        assertThat(actualResponse.getTitle()).isEqualTo("Task Title");
+        assertThat(actualResponse.getTitle()).isEqualTo("Groceries");
 
         verify(taskMapper, times(1)).mapToTask(eq(mockRequest));
         verify(taskRepository, times(1)).save(eq(unsavedTask));

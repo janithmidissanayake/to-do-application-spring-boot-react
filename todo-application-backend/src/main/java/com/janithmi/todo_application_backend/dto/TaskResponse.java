@@ -1,5 +1,6 @@
 package com.janithmi.todo_application_backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,7 @@ public class TaskResponse {
     private Long id;
     private String title;
     private String description;
-    private boolean isCompleted ;
+    private boolean completed;
     private ZonedDateTime createdAt;
 
 

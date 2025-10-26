@@ -19,7 +19,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    exclude: [...configDefaults.exclude, 'e2e/*'],
+    exclude: [...configDefaults.exclude, 'e2e/*', 'tests/**/*.spec.js', '**/*.spec.js'],
     setupFiles: ['./src/setupTests.js'], // 🧩 optional: auto-import jest-dom, etc.
     coverage: {
       provider: 'v8',

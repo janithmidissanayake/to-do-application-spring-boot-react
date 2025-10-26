@@ -41,14 +41,14 @@ public class TaskControllerTest {
     private final String BASE_URI = "/api/v1/tasks";
 
     private TaskRequest createMockRequest() {
-        return new TaskRequest("Test Title", "Test Description");
+        return new TaskRequest("Groceries", "Buy vegetables and fruits");
     }
 
     private TaskResponse createMockResponse() {
         return TaskResponse.builder()
                 .id(1L)
-                .title("Test Title")
-                .isCompleted(false)
+                .title("Groceries")
+                .completed(false)
                 .createdAt(ZonedDateTime.now())
                 .build();
     }
@@ -66,7 +66,7 @@ public class TaskControllerTest {
                 .andExpect(status().isCreated()) // 201
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.title", is("Test Title")));
+                .andExpect(jsonPath("$.title", is("Groceries")));
 
         verify(taskService, times(1)).createTask(any(TaskRequest.class));
     }
