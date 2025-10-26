@@ -9,17 +9,19 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Allow all endpoints
+        registry.addMapping("/**")
                 .allowedOrigins(
-                        "http://localhost:5173", // React Vite dev server
-                        "http://localhost:8080", // Optional
-                        "http://127.0.0.1:8080"  // Optional
+                        "http://localhost:5173",  // local dev
+                        "http://localhost",        // host port 80 for frontend container
+                        "http://todo-frontend",    // frontend container name inside Docker network
+                        "http://todo-backend:8080" // optional if backend calls itself
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
-        }
     }
+    }
+
 
 
 

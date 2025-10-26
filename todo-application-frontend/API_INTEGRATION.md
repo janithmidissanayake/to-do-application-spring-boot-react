@@ -11,6 +11,11 @@ A centralized API service that handles all HTTP requests to the backend:
 - `getRecentTasks(limit)` - GET request to fetch recent tasks
 - `completeTask(id)` - PUT request to mark a task as complete
 
+**API URL Configuration:**
+- Uses `VITE_API_URL` environment variable for flexibility
+- Defaults to `http://localhost:8080` for local development
+- Can be customized for different environments (Docker, production, etc.)
+
 ### 2. Updated Components
 
 #### App.jsx
@@ -62,17 +67,38 @@ A centralized API service that handles all HTTP requests to the backend:
 
 ## How to Run
 
-### Backend
-1. Make sure MySQL is running (or H2 in-memory database for testing)
+### Option 1: Using Docker (Recommended)
+
+1. Make sure Docker and Docker Compose are installed
+2. From the project root directory, run:
+   ```bash
+   docker-compose up --build
+   ```
+3. Access the application:
+   - Frontend: `http://localhost` (port 80)
+   - Backend API: `http://localhost:8080`
+4. The frontend is configured to connect to `http://localhost:8080` for the backend API
+
+### Option 2: Local Development (Without Docker)
+
+#### Backend
+1. Make sure MySQL is running on localhost:3306
 2. Navigate to `todo-application-backend` directory
 3. Run: `./mvnw spring-boot:run` (Linux/Mac) or `mvnw.cmd spring-boot:run` (Windows)
 4. Backend will start on `http://localhost:8080`
 
-### Frontend
+#### Frontend
 1. Navigate to `todo-application-frontend` directory
 2. Install dependencies: `npm install`
 3. Run: `npm run dev`
 4. Frontend will start on `http://localhost:5173`
+5. The frontend will automatically connect to `http://localhost:8080`
+
+**Environment Variables (Optional):**
+Create a `.env` file in `todo-application-frontend` directory to customize the API URL:
+```
+VITE_API_URL=http://localhost:8080
+```
 
 ## Testing the Integration
 
@@ -94,10 +120,14 @@ A centralized API service that handles all HTTP requests to the backend:
 - Verify the frontend is running on `http://localhost:5173`
 - Check browser console for specific CORS error messages
 
-### Connection Refused
-- Ensure the backend is running on port 8080
+### Connection Refused / Failed to Load Tasks
+- **Most Common Issue:** Backend not running on port 8080
+  - If using Docker: Make sure `docker-compose up` is running
+  - If local dev: Start the backend with `./mvnw spring-boot:run`
 - Check if another service is using port 8080
-- Verify the API base URL in `src/services/api.js`
+- Verify the API base URL in `src/services/api.js` (should be `http://localhost:8080`)
+- Check browser console Network tab to see if API requests are reaching the backend
+- If using Docker: The frontend connects to `http://localhost:8080`, not the Docker container name
 
 ### Tasks Not Appearing
 - Check browser console for API errors
@@ -110,5 +140,6 @@ A centralized API service that handles all HTTP requests to the backend:
 - Add pagination for task list
 - Implement task deletion
 - Add task filtering and sorting
+
 
 

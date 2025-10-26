@@ -4,7 +4,7 @@ import api from './api';
 export const taskService = {
   createTask: async (taskData) => {
     try {
-      const response = await api.post('/tasks/createTask', taskData);
+      const response = await api.post('/api/v1/tasks/createTask', taskData);
       return response.data;
     } catch (error) {
       console.error('Failed to create task:', error);
@@ -14,7 +14,7 @@ export const taskService = {
 
   getRecentTasks: async (limit = 5) => {
     try {
-      const response = await api.get('/tasks/recentTasks', {
+      const response = await api.get('/api/v1/tasks/recentTasks', {
         params: { limit },
       });
       return response.data;
@@ -26,7 +26,7 @@ export const taskService = {
 
   completeTask: async (id) => {
     try {
-      const response = await api.put(`/tasks/${id}/complete`);
+      const response = await api.put(`/api/v1/tasks/${id}/complete`);
       return response.data;
     } catch (error) {
       console.error('Failed to complete task:', error);
