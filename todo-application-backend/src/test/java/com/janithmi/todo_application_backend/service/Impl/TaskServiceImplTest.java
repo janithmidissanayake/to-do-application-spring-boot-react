@@ -96,15 +96,12 @@ public class TaskServiceImplTest {
         given(taskMapper.mapToTaskResponse(eq(task1))).willReturn(response1);
         given(taskMapper.mapToTaskResponse(eq(task2))).willReturn(response2);
 
-        // Act
         List<TaskResponse> actualResponses = taskService.getLatestTasksActivities(limit);
 
-        // Assert
         assertThat(actualResponses).hasSize(2);
         assertThat(actualResponses.get(0).getId()).isEqualTo(1L);
         assertThat(actualResponses.get(1).getId()).isEqualTo(2L);
 
-        // Verify
         verify(taskRepository, times(1)).findLatestActiveTasks(eq(expectedPageable));
         verify(taskMapper, times(2)).mapToTaskResponse(any(Task.class));
     }
@@ -117,13 +114,10 @@ public class TaskServiceImplTest {
         given(taskRepository.findLatestActiveTasks(eq(expectedPageable)))
                 .willReturn(Collections.emptyList());
 
-        // Act
         List<TaskResponse> actualResponses = taskService.getLatestTasksActivities(limit);
 
-        // Assert
         assertThat(actualResponses).isNotNull().isEmpty();
 
-        // Verify
         verify(taskRepository, times(1)).findLatestActiveTasks(eq(expectedPageable));
         verify(taskMapper, times(0)).mapToTaskResponse(any(Task.class));
     }
@@ -136,13 +130,10 @@ public class TaskServiceImplTest {
         given(taskRepository.findById(taskId)).willReturn(Optional.of(task));
         given(taskRepository.save(task)).willReturn(task);
 
-        // Act
         taskService.completeTask(taskId);
 
-        // Assert
         assertThat(task.isCompleted()).isTrue();
 
-        // Verify
         verify(taskRepository, times(1)).findById(taskId);
         verify(taskRepository, times(1)).save(task);
     }
@@ -153,10 +144,8 @@ public class TaskServiceImplTest {
 
         given(taskRepository.findById(taskId)).willReturn(Optional.empty());
 
-        // Act + Assert
         assertThrows(TaskNotFoundException.class, () -> taskService.completeTask(taskId));
 
-        // Verify
         verify(taskRepository, times(1)).findById(taskId);
         verify(taskRepository, times(0)).save(any());
     }

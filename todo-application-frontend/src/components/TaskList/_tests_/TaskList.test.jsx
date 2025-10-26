@@ -13,25 +13,23 @@ describe('TaskList Component', () => {
 
   it('renders correct number of tasks', () => {
     const tasks = [
-      { id: 1, title: 'Task 1', description: '', completed: false },
-      { id: 2, title: 'Task 2', description: '', completed: true },
+      { id: 1, title: 'Groceries', description: '', completed: false },
+      { id: 2, title: 'watching a tv series', description: '', completed: true },
     ];
 
     render(<TaskList tasks={tasks} onToggle={mockOnToggle} />);
 
-    // Check that both task titles are in the document
     tasks.forEach(task => {
       expect(screen.getByText(task.title)).toBeInTheDocument();
     });
 
-    // Check that the correct number of buttons exist
     const buttons = screen.getAllByRole('button', { name: /Done/i });
     expect(buttons.length).toBe(tasks.length);
   });
 
   it('calls onToggle when a task button is clicked', () => {
     const tasks = [
-      { id: 1, title: 'Task 1', description: '', completed: false },
+      { id: 1, title: 'Groceries', description: '', completed: false },
     ];
 
     render(<TaskList tasks={tasks} onToggle={mockOnToggle} />);

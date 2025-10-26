@@ -9,7 +9,6 @@ const TaskCard = ({ task, onToggle }) => {
                   ${task.completed ? 'opacity-60 scale-95' : 'hover:-translate-y-1'}`}
     >
       <div className="flex items-start justify-between gap-4">
-        {/* Text content */}
         <div className="flex-1 min-w-0">
           <h3 data-testid="task-title" className={`text-lg font-bold text-purple-900 mb-2 break-words leading-tight ${
             task.completed ? 'line-through text-purple-600' : ''
@@ -25,7 +24,6 @@ const TaskCard = ({ task, onToggle }) => {
           )}
         </div>
 
-        {/* Done Button */}
         <div className="flex-shrink-0">
           <button
             onClick={() => onToggle(task.id)}

@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import App from '../App.jsx';
 import { taskService } from '../../services/taskService.js';
 
-// Mock the taskService
+// --- Mock the taskService ---
 vi.mock('../../services/taskService.js', () => ({
   taskService: {
     getRecentTasks: vi.fn(),
@@ -20,49 +20,53 @@ describe('App Component', () => {
   });
 
   it('renders loading state initially', async () => {
-    taskService.getRecentTasks.mockReturnValue(new Promise(() => {}));
+    taskService.getRecentTasks.mockReturnValue(new Promise(() => {})); // never resolves
     render(<App />);
     expect(screen.getByText(/loading tasks/i)).toBeInTheDocument();
   });
 
-  it('renders tasks from service', async () => {
+  it('renders tasks fetched from the service correctly', async () => {
     const tasks = [
-      { id: 1, title: 'Task 1', completed: false },
-      { id: 2, title: 'Task 2', completed: false },
+      { id: 1, title: 'Attending to a party', completed: false },
+      { id: 2, title: 'Buying a dress', completed: false },
     ];
     taskService.getRecentTasks.mockResolvedValue(tasks);
 
     render(<App />);
 
     await waitFor(() => {
-      expect(screen.getByText('Task 1')).toBeInTheDocument();
-      expect(screen.getByText('Task 2')).toBeInTheDocument();
+      expect(screen.getByText('Attending to a party')).toBeInTheDocument();
+      expect(screen.getByText('Buying a dress')).toBeInTheDocument();
     });
   });
 
-  it('displays error if fetching fails', async () => {
+  it('displays an error message when fetching tasks fails', async () => {
     taskService.getRecentTasks.mockRejectedValue(new Error('Network Error'));
+
     render(<App />);
+
     await waitFor(() => {
       expect(screen.getByText(/failed to load tasks/i)).toBeInTheDocument();
     });
   });
 
-  it('adds a new task correctly', async () => {
-    const newTask = { id: 3, title: 'New Task', completed: false };
-    taskService.getRecentTasks.mockResolvedValue([]);
+  it('adds a new task successfully and displays it in the list', async () => {
+    const newTask = { id: 3, title: 'Watching a movie', completed: false };
+    taskService.getRecentTasks.mockResolvedValue([]); // initially empty
     taskService.createTask.mockResolvedValue(newTask);
 
     render(<App />);
-    const input = screen.getByPlaceholderText(/enter task title/i); // replace with actual placeholder
-    const button = screen.getByRole('button', { name: /add task/i }); // replace with actual button text
 
-    await userEvent.type(input, 'New Task');
+    const input = screen.getByPlaceholderText(/enter task title/i);
+    const button = screen.getByRole('button', { name: /add task/i });
+
+    await userEvent.type(input, 'Watching a movie');
     await userEvent.click(button);
 
     await waitFor(() => {
-      expect(screen.getByText('New Task')).toBeInTheDocument();
+      expect(
+        screen.getByText((text) => text.trim() === 'Watching a movie')
+      ).toBeInTheDocument();
     });
   });
 });
-

@@ -34,16 +34,16 @@ describe('TaskForm Component', () => {
     const user = userEvent.setup();
     render(<TaskForm onAddTask={mockOnAddTask} />);
     const input = screen.getByPlaceholderText(/Enter task title/i);
-    await user.type(input, 'My Task');
-    expect(input).toHaveValue('My Task');
+    await user.type(input, 'watering plants');
+    expect(input).toHaveValue('watering plants');
   });
 
   it('updates description input', async () => {
     const user = userEvent.setup();
     render(<TaskForm onAddTask={mockOnAddTask} />);
     const textarea = screen.getByPlaceholderText(/Enter task description/i);
-    await user.type(textarea, 'My description');
-    expect(textarea).toHaveValue('My description');
+    await user.type(textarea, 'Watering my mango plant every morning');
+    expect(textarea).toHaveValue('Watering my mango plant every morning');
   });
 
   it('enables button when title is not empty', async () => {
@@ -51,7 +51,7 @@ describe('TaskForm Component', () => {
     render(<TaskForm onAddTask={mockOnAddTask} />);
     const input = screen.getByPlaceholderText(/Enter task title/i);
     const button = screen.getByRole('button', { name: /Add Task/i });
-    await user.type(input, 'Task');
+    await user.type(input, 'jogging at the park');
     expect(button).toBeEnabled();
   });
 
@@ -98,8 +98,8 @@ describe('TaskForm Component', () => {
     const descInput = screen.getByPlaceholderText(/Enter task description/i);
     const button = screen.getByRole('button', { name: /Add Task/i });
 
-    await user.type(titleInput, 'Task');
-    await user.type(descInput, 'Desc');
+    await user.type(titleInput, 'Jogging ');
+    await user.type(descInput, 'It will good for health ');
     await user.click(button);
 
     expect(titleInput).toHaveValue('');

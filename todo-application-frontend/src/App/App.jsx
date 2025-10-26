@@ -33,12 +33,10 @@ function App() {
   const handleAddTask = async (taskData) => {
     try {
       setLoading(true);
-      // Send only title and description to match backend TaskRequest DTO
       const newTask = await taskService.createTask({
         title: taskData.title,
         description: taskData.description
       });
-      // Add the new task to the beginning of the list
       setTasks([newTask, ...tasks]);
       setError(null);
       return { success: true };
@@ -54,7 +52,6 @@ function App() {
   const handleToggleTask = async (id) => {
     try {
       await taskService.completeTask(id);
-      // Update local state to mark task as completed
       setTasks(tasks.map(task => 
         task.id === id ? { ...task, completed: true } : task
       ));
@@ -65,7 +62,6 @@ function App() {
     }
   };
 
-  // Filter out completed tasks and show only the 5 most recent tasks
   const visibleTasks = tasks
     .filter(task => !task.completed)
     .slice(0, 5);

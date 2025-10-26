@@ -5,7 +5,6 @@ const TaskForm = ({ onAddTask }) => {
   const [submitting, setSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  // Auto-hide success alert after 3 seconds
   useEffect(() => {
     if (showSuccess) {
       const timer = setTimeout(() => {
@@ -48,10 +47,8 @@ const TaskForm = ({ onAddTask }) => {
         <p className="text-purple-600 text-sm">Create and organize your tasks efficiently</p>
       </div>
       
-      {/* Success Notification */}
       {showSuccess && (
         <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-400 rounded-xl px-5 py-4 flex items-center gap-4 shadow-lg animate-slideDown">
-          {/* Purple checkmark icon with animation */}
           <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full flex items-center justify-center shadow-md animate-scale">
             <svg 
               className="w-6 h-6 text-white" 
@@ -66,10 +63,8 @@ const TaskForm = ({ onAddTask }) => {
             </svg>
           </div>
           
-          {/* Success message */}
-          <span className="flex-1 text-purple-900 font-semibold text-base">Task added successfully! 🎉</span>
+          <span className="flex-1 text-purple-900 font-semibold text-base">Task added successfully! </span>
           
-          {/* Close button */}
           <button
             onClick={() => setShowSuccess(false)}
             className="flex-shrink-0 text-purple-400 hover:text-purple-700 transition-all duration-200 hover:scale-110"
