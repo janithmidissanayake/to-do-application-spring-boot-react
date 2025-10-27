@@ -42,12 +42,10 @@ services:
     build:
       context: ./todo-application-backend
       dockerfile: Dockerfile
-      # IMPORTANT: Target the builder stage which has Maven and the test source code
       target: maven-builder
     container_name: todo-backend-test-runner
     command: mvn clean test
     environment:
-      # Use the same database configuration for integration tests if needed
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/todo
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: "password123#"
@@ -56,7 +54,7 @@ services:
         condition: service_healthy
     networks:
       - todo-network
-    restart: "no" # Ensures the container stops after running tests
+    restart: "no"
 
   frontend:
     build:
@@ -89,28 +87,23 @@ services:
     build:
       context: ./todo-application-frontend
       dockerfile: Dockerfile
-      # Target the e2e-test-runner stage which uses Debian (Playwright compatible)
       target: e2e-test-runner
       args:
         - VITE_API_URL=http://backend:8080
     container_name: todo-frontend-e2e-test-runner
-    # Playwright requires the entire application to be running
     depends_on:
       db:
         condition: service_healthy
       backend:
         condition: service_started
-    # Serve the built frontend and run E2E tests
     command: sh -c "npx --yes serve -s dist -l 5173 & until curl -s http://localhost:5173 > /dev/null; do echo 'Waiting for frontend server...'; sleep 1; done && echo 'Frontend ready!' && npm run e2e"
     environment:
-      # Test against the locally served frontend (with correct API URL)
       PLAYWRIGHT_BASE_URL: http://localhost:5173/
       VITE_API_URL: http://backend:8080
     networks:
       - todo-network
-    restart: "no" # Ensures the container stops after running E2E tests
+    restart: "no"
 
-  # Fast E2E tests (Chromium only) - Use this for quicker feedback during development
   frontend-e2e-test-fast:
     build:
       context: ./todo-application-frontend
