@@ -207,27 +207,7 @@ SELECT * FROM task;
   - Form validation
   - User workflows
 
-## ⚙️ Environment Variables
 
-### Backend (application.properties)
 
-```properties
-# Database Configuration
-spring.datasource.url=jdbc:mysql://localhost:3306/todo
-spring.datasource.username=root
-spring.datasource.password=password123#
 
-# JPA/Hibernate
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-
-# Server
-server.port=8080
-```
-
-### Frontend (Vite)
-
-```bash
-VITE_API_URL=http://localhost:8080  # Backend API URL
-```
 
