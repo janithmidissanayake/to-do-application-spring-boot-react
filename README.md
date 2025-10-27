@@ -29,6 +29,7 @@ This command will:
 - Start MySQL database
 - Start Spring Boot backend
 - Start React frontend with Nginx
+  
 
 ### 3. Access the Application
 
@@ -86,6 +87,8 @@ Run frontend unit tests (37 tests):
 
 ```bash
 docker-compose run --rm frontend-unit-test
+. Build - as it takes some time for build this can be also use.
+docker-compose build frontend-e2e-test
 ```
 
 **Test Coverage:**
