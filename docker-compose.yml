@@ -1,49 +1,68 @@
-version: '3.8'
-
 services:
-  # MySQL Database
-  mysql:
+  db:
     image: mysql:8.0
-    container_name: todo-mysql
+    container_name: todo-db
     environment:
       MYSQL_ROOT_PASSWORD: "password123#"
       MYSQL_DATABASE: todo
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 20s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ppassword123#"]
+      interval: 10s
+      timeout: 5s
       retries: 10
+      start_period: 60s
     networks:
       - todo-network
 
-  # Spring Boot Backend
   backend:
     build:
       context: ./todo-application-backend
       dockerfile: Dockerfile
+      target: final-runner
     container_name: todo-backend
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/todo
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/todo
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: "password123#"
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
       - "8080:8080"
     depends_on:
-      mysql:
+      db:
         condition: service_healthy
     networks:
       - todo-network
     restart: on-failure
 
-  # React Frontend
+  backend-test:
+    build:
+      context: ./todo-application-backend
+      dockerfile: Dockerfile
+      # IMPORTANT: Target the builder stage which has Maven and the test source code
+      target: maven-builder
+    container_name: todo-backend-test-runner
+    command: mvn clean test
+    environment:
+      # Use the same database configuration for integration tests if needed
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/todo
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: "password123#"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - todo-network
+    restart: "no" # Ensures the container stops after running tests
+
   frontend:
     build:
       context: ./todo-application-frontend
       dockerfile: Dockerfile
+      target: production
     container_name: todo-frontend
     ports:
       - "80:80"
@@ -51,11 +70,45 @@ services:
       - backend
     networks:
       - todo-network
+    restart: on-failure
+
+  frontend-unit-test:
+    build:
+      context: ./todo-application-frontend
+      dockerfile: Dockerfile
+      target: app-builder
+    container_name: todo-frontend-unit-test-runner
+    # Executes the 'test:coverage' script from package.json
+    command: npm run test:coverage
+    networks:
+      - todo-network
+    restart: "no" # Ensures the container stops after running tests
+
+
+  frontend-e2e-test:
+    build:
+      context: ./todo-application-frontend
+      dockerfile: Dockerfile
+      # Target the e2e-test-runner stage which uses Debian (Playwright compatible)
+      target: e2e-test-runner
+    container_name: todo-frontend-e2e-test-runner
+    # Playwright requires the entire application to be running
+    depends_on:
+      - frontend # Ensure frontend is up
+      - backend  # Ensure backend is up
+    # Installs Playwright browser dependencies (Crucial for E2E tests) and runs E2E tests
+    command: sh -c "npx playwright install --with-deps && npm run e2e"
+    environment:
+      # Direct Playwright to the service name and exposed port of the frontend container
+      PLAYWRIGHT_BASE_URL: http://frontend:80/
+    networks:
+      - todo-network
+    restart: "no" # Ensures the container stops after running E2E tests
+
 
 volumes:
-  mysql_data:
+  db_data:
 
 networks:
   todo-network:
     driver: bridge
-

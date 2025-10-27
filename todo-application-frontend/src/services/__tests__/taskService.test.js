@@ -25,7 +25,7 @@ describe('taskService', () => {
       const result = await taskService.createTask(taskData);
 
       expect(api.post).toHaveBeenCalledTimes(1);
-      expect(api.post).toHaveBeenCalledWith('/tasks/createTask', taskData);
+      expect(api.post).toHaveBeenCalledWith('/api/v1/tasks/createTask', taskData);
       expect(result).toEqual(mockResponse.data);
     });
 
@@ -49,7 +49,7 @@ describe('taskService', () => {
 
       const result = await taskService.createTask(taskData);
 
-      expect(api.post).toHaveBeenCalledWith('/tasks/createTask', taskData);
+      expect(api.post).toHaveBeenCalledWith('/api/v1/tasks/createTask', taskData);
       expect(result).toEqual(mockResponse.data);
     });
   });
@@ -68,7 +68,7 @@ describe('taskService', () => {
 
       const result = await taskService.getRecentTasks();
 
-      expect(api.get).toHaveBeenCalledWith('/tasks/recentTasks', { params: { limit: 5 } });
+      expect(api.get).toHaveBeenCalledWith('/api/v1/tasks/recentTasks', { params: { limit: 5 } });
       expect(result).toEqual(mockResponse.data);
     });
 
@@ -85,7 +85,7 @@ describe('taskService', () => {
 
       const result = await taskService.getRecentTasks(customLimit);
 
-      expect(api.get).toHaveBeenCalledWith('/tasks/recentTasks', { params: { limit: customLimit } });
+      expect(api.get).toHaveBeenCalledWith('/api/v1/tasks/recentTasks', { params: { limit: customLimit } });
       expect(result).toEqual(mockResponse.data);
       expect(result).toHaveLength(3);
     });
@@ -120,7 +120,7 @@ describe('taskService', () => {
 
       const result = await taskService.completeTask(taskId);
 
-      expect(api.put).toHaveBeenCalledWith(`/tasks/${taskId}/complete`);
+      expect(api.put).toHaveBeenCalledWith(`/api/v1/tasks/${taskId}/complete`);
       expect(result.completed).toBe(true);
     });
 
