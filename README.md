@@ -95,11 +95,22 @@ docker-compose run --rm frontend-unit-test
 
 ### Frontend E2E Tests (Playwright)
 
+**⚡ PERFORMANCE TIP**: E2E tests now install browsers during Docker build (only once), not at runtime!
+
 Run end-to-end tests:
 
 ```bash
+# Full test suite (Chromium + Firefox) - More thorough
 docker-compose run --rm frontend-e2e-test
+
+# Fast mode (Chromium only) - 2x faster for quick feedback
+docker-compose run --rm frontend-e2e-test-fast
 ```
+
+**Speed Comparison:**
+- First build: ~2 minutes (downloads browsers once)
+- Subsequent runs: ~30 seconds (browsers cached in image)
+- Fast mode: ~15 seconds (single browser)
 
 After tests complete, view the HTML report:
 

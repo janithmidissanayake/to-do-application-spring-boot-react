@@ -5,8 +5,7 @@ test.describe('Task Creation', () => {
 
   test('Successful Task Creation', async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
-
+    
     const titleInput = page.locator('[data-testid="task-title-input"]');
     await titleInput.waitFor({ state: 'visible' });
     await titleInput.click();
@@ -31,8 +30,7 @@ test.describe('Task Creation', () => {
 
   test('Title Validation - Required Field', async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
-
+    
     const descInput = page.locator('[data-testid="task-description-input"]');
     await descInput.waitFor({ state: 'visible' });
     await descInput.click();
@@ -46,8 +44,7 @@ test.describe('Task Creation', () => {
 
   test('Description is Optional', async ({ page }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
-
+    
     const titleInput = page.locator('[data-testid="task-title-input"]');
     await titleInput.waitFor({ state: 'visible' });
     await titleInput.click();

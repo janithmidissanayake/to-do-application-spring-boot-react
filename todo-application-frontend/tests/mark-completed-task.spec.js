@@ -5,8 +5,8 @@ test.describe('Mark Task as Completed', () => {
   // Setup before each test
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    
-    await page.waitForLoadState('networkidle');
+    // Wait for the title input to be visible (ensures page is loaded)
+    await page.locator('[data-testid="task-title-input"]').waitFor({ state: 'visible' });
   });
 
   test('Clicking Done removes task from the list', async ({ page }) => {
